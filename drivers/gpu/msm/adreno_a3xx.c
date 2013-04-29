@@ -3154,36 +3154,29 @@ static void a3xx_perfcounter_init(struct adreno_device *adreno_dev)
  */
 static void a3xx_protect_init(struct kgsl_device *device)
 {
-	int index = 0;
-
 	/* enable access protection to privileged registers */
 	kgsl_regwrite(device, A3XX_CP_PROTECT_CTRL, 0x00000007);
 
 	/* RBBM registers */
-	adreno_set_protected_registers(device, &index, 0x18, 0);
-	adreno_set_protected_registers(device, &index, 0x20, 2);
-	adreno_set_protected_registers(device, &index, 0x33, 0);
-	adreno_set_protected_registers(device, &index, 0x42, 0);
-	adreno_set_protected_registers(device, &index, 0x50, 4);
-	adreno_set_protected_registers(device, &index, 0x63, 0);
-	adreno_set_protected_registers(device, &index, 0x100, 4);
+	kgsl_regwrite(device, A3XX_CP_PROTECT_REG_0, 0x63000040);
+	kgsl_regwrite(device, A3XX_CP_PROTECT_REG_1, 0x62000080);
+	kgsl_regwrite(device, A3XX_CP_PROTECT_REG_2, 0x600000CC);
+	kgsl_regwrite(device, A3XX_CP_PROTECT_REG_3, 0x60000108);
+	kgsl_regwrite(device, A3XX_CP_PROTECT_REG_4, 0x64000140);
+	kgsl_regwrite(device, A3XX_CP_PROTECT_REG_5, 0x66000400);
 
 	/* CP registers */
-	adreno_set_protected_registers(device, &index, 0x1C0, 5);
-	adreno_set_protected_registers(device, &index, 0x1EC, 1);
-	adreno_set_protected_registers(device, &index, 0x1F6, 1);
-	adreno_set_protected_registers(device, &index, 0x1F8, 2);
-	adreno_set_protected_registers(device, &index, 0x45E, 2);
-	adreno_set_protected_registers(device, &index, 0x460, 4);
+	kgsl_regwrite(device, A3XX_CP_PROTECT_REG_6, 0x65000700);
+	kgsl_regwrite(device, A3XX_CP_PROTECT_REG_7, 0x610007D8);
+	kgsl_regwrite(device, A3XX_CP_PROTECT_REG_8, 0x620007E0);
+	kgsl_regwrite(device, A3XX_CP_PROTECT_REG_9, 0x61001178);
+	kgsl_regwrite(device, A3XX_CP_PROTECT_REG_A, 0x64001180);
 
 	/* RB registers */
-	adreno_set_protected_registers(device, &index, 0xCC0, 0);
+	kgsl_regwrite(device, A3XX_CP_PROTECT_REG_B, 0x60003300);
 
 	/* VBIF registers */
-	adreno_set_protected_registers(device, &index, 0x3000, 6);
-
-	/* SMMU registers */
-	adreno_set_protected_registers(device, &index, 0x4000, 14);
+	kgsl_regwrite(device, A3XX_CP_PROTECT_REG_C, 0x6B00C000);
 }
 
 static void a3xx_start(struct adreno_device *adreno_dev)
