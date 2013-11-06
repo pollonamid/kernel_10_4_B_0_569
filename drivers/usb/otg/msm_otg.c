@@ -1239,8 +1239,11 @@ static void msm_otg_start_host(struct usb_otg *otg, int on)
 		if (pdata->setup_gpio)
 			pdata->setup_gpio(OTG_STATE_A_HOST);
 
+<<<<<<< HEAD
 		ulpi_init(motg, pdata->phy_init_seq_host);
 
+=======
+>>>>>>> 48a5325... USB: OTG: Fix Full speed USB Headset issue
 		/*
 		 * Increase 3.3V rail voltage to increase cross over voltage.
 		 * This is required to get some full speed audio headsets
