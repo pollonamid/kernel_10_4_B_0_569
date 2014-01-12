@@ -1,0 +1,10 @@
+--- include/net/bluetooth/mgmt.h	2012-05-21 00:29:13.000000000 +0200
++++ include/net/bluetooth/mgmt.h	2014-01-08 18:42:33.000000000 +0100
+@@ -42,6 +42,7 @@
+ #define MGMT_STATUS_NOT_POWERED		0x0f
+ #define MGMT_STATUS_CANCELLED		0x10
+ #define MGMT_STATUS_INVALID_INDEX	0x11
++#define MGMT_STATUS_RFKILLED		0x12
+ 
+ struct mgmt_hdr {
+ 	__le16	opcode;

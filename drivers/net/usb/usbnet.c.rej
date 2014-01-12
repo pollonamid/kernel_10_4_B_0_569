@@ -1,0 +1,19 @@
+--- drivers/net/usb/usbnet.c	2012-05-21 00:29:13.000000000 +0200
++++ drivers/net/usb/usbnet.c	2014-01-08 18:42:33.000000000 +0100
+@@ -1158,6 +1158,7 @@
+ 		usb_anchor_urb(urb, &dev->deferred);
+ 		/* no use to process more packets */
+ 		netif_stop_queue(net);
++		usb_put_urb(urb);
+ 		spin_unlock_irqrestore(&dev->txq.lock, flags);
+ 		netdev_dbg(dev->net, "Delaying transmission for resumption\n");
+ 		goto deferred;
+@@ -1299,6 +1300,8 @@
+ 
+ 	cancel_work_sync(&dev->kevent);
+ 
++	usb_scuttle_anchored_urbs(&dev->deferred);
++
+ 	if (dev->driver_info->unbind)
+ 		dev->driver_info->unbind (dev, intf);
+ 

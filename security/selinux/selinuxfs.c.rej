@@ -1,0 +1,10 @@
+--- security/selinux/selinuxfs.c	2012-05-21 00:29:13.000000000 +0200
++++ security/selinux/selinuxfs.c	2014-01-08 18:42:33.000000000 +0100
+@@ -1232,6 +1232,7 @@
+ 		kfree(bool_pending_names[i]);
+ 	kfree(bool_pending_names);
+ 	kfree(bool_pending_values);
++	bool_num = 0;
+ 	bool_pending_names = NULL;
+ 	bool_pending_values = NULL;
+ 

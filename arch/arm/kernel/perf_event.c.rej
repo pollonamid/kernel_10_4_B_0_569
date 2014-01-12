@@ -1,0 +1,16 @@
+--- arch/arm/kernel/perf_event.c	2012-05-21 00:29:13.000000000 +0200
++++ arch/arm/kernel/perf_event.c	2014-01-08 18:42:33.000000000 +0100
+@@ -109,7 +109,12 @@
+ static int
+ armpmu_map_event(const unsigned (*event_map)[PERF_COUNT_HW_MAX], u64 config)
+ {
+-	int mapping = (*event_map)[config];
++	int mapping;
++
++	if (config >= PERF_COUNT_HW_MAX)
++		return -ENOENT;
++
++	mapping = (*event_map)[config];
+ 	return mapping == HW_OP_UNSUPPORTED ? -ENOENT : mapping;
+ }
+ 
