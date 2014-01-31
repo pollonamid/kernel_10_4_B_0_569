@@ -1,4 +1,4 @@
-/* Copyright (c) 2011-2012, The Linux Foundation. All rights reserved.
+/* Copyright (c) 2011-2014, The Linux Foundation. All rights reserved.
  * Copyright (C) 2013 Sony Mobile Communications AB.
  *
  * This program is free software; you can redistribute it and/or modify
@@ -3661,6 +3661,9 @@ static int vfe32_proc_general(
 
 		break;
 	default:
+		if (cmd->id < 0 || cmd->id > VFE_CMD_MAX)
+			return -EINVAL;
+
 		if (cmd->length != vfe32_cmd[cmd->id].length)
 			return -EINVAL;
 
