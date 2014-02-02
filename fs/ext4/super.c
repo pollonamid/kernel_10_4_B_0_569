@@ -530,7 +530,6 @@ void ext4_error_inode(struct inode *inode, const char *function,
 		       inode->i_sb->s_id, function, line, inode->i_ino,
 		       current->comm, &vaf);
 	va_end(args);
-	save_error_info(sb, function, line);
 
 	ext4_handle_error(inode->i_sb);
 }

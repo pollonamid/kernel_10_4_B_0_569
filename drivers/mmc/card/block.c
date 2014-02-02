@@ -928,7 +928,7 @@ static int mmc_blk_cmd_error(struct request *req, const char *name, int error,
  */
 static int mmc_blk_cmd_recovery(struct mmc_card *card, struct request *req,
 	struct mmc_blk_request *brq, int *ecc_err, u32 status,
-	bool status_valid)
+	bool status_valid, int *gen_err)
 {
 	u32 stop_status = 0;
 	int err;
@@ -1257,6 +1257,7 @@ static int mmc_blk_err_check(struct mmc_card *card,
 	struct mmc_blk_request *brq = &mq_mrq->brq;
 	struct request *req = mq_mrq->req;
 	int retries, err, ecc_err = 0;
+	int gen_err = 0;
 	u32 status = 0;
 	bool status_valid = true;
 
@@ -1297,7 +1298,7 @@ static int mmc_blk_err_check(struct mmc_card *card,
 	if (brq->sbc.error || brq->cmd.error || brq->stop.error ||
 	    brq->data.error) {
 		switch (mmc_blk_cmd_recovery(card, req, brq, &ecc_err, status,
-		    status_valid)) {
+		    status_valid, &gen_err)) {
 		case ERR_RETRY:
 			return MMC_BLK_RETRY;
 		case ERR_ABORT:
@@ -2155,13 +2156,6 @@ static int mmc_blk_issue_rw_rq(struct mmc_queue *mq, struct request *rqc)
 					   req->rq_disk->disk_name);
 				disable_multi = 1;
 				break;
-			}
-
-			if (status & R1_ERROR) {
-				pr_err("%s: %s: general error sending status command, card status %#x\n",
-				       req->rq_disk->disk_name, __func__,
-				       status);
-				gen_err = 1;
 			}
 
 			/*
