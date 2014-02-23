@@ -2482,6 +2482,11 @@ static int mdp_on(struct platform_device *pdev)
 		atomic_set(&vsync_cntrl.suspend, 1);
 	}
 
+	mdp_pipe_ctrl(MDP_CMD_BLOCK, MDP_BLOCK_POWER_ON, FALSE);
+
+	ret = panel_next_on(pdev);
+	mdp_pipe_ctrl(MDP_CMD_BLOCK, MDP_BLOCK_POWER_OFF, FALSE);
+
 	mdp_histogram_ctrl_all(TRUE);
 
 	if (ret == 0)
