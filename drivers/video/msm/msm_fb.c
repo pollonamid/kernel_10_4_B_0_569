@@ -602,28 +602,6 @@ static int msm_fb_suspend(struct platform_device *pdev, pm_message_t state)
 #define msm_fb_suspend NULL
 #endif
 
-static void msm_fb_shutdown(struct platform_device *pdev)
-{
-	struct msm_fb_data_type *mfd;
-	int ret = 0;
-	MSM_FB_DEBUG("msm_fb_shutdown\n");
-
-	mfd = (struct msm_fb_data_type *)platform_get_drvdata(pdev);
-	if (mfd) {
-		if (mfd->op_enable) {
-			ret = msm_fb_blank_sub(FB_BLANK_POWERDOWN, mfd->fbi,
-					     mfd->op_enable);
-		}
-
-		if (ret)
-			MSM_FB_INFO
-				("msm_fb_shutdown: can't turn off display!\n");
-
-		mfd->op_enable = FALSE;
-		mdp_pipe_ctrl(MDP_MASTER_BLOCK, MDP_BLOCK_POWER_OFF, FALSE);
-	}
-}
-
 static int msm_fb_suspend_sub(struct msm_fb_data_type *mfd)
 {
 	int ret = 0;
