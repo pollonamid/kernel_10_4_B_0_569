@@ -866,13 +866,11 @@ static struct notifier_block __cpuinitdata pmu_cpu_notifier = {
 static int perf_cpu_pm_notifier(struct notifier_block *self, unsigned long cmd,
 		void *v)
 {
-	struct pmu *pmu;
 	switch (cmd) {
 	case CPU_PM_ENTER:
 		if (cpu_has_active_perf((int)v)) {
 			armpmu_update_counters();
-			pmu = &cpu_pmu->pmu;
-			pmu->pmu_disable(pmu);
+			perf_pmu_disable(&cpu_pmu->pmu);
 		}
 		break;
 
@@ -885,8 +883,7 @@ static int perf_cpu_pm_notifier(struct notifier_block *self, unsigned long cmd,
 			 */
 			__get_cpu_var(from_idle) = 1;
 			cpu_pmu->reset(NULL);
-			pmu = &cpu_pmu->pmu;
-			pmu->pmu_enable(pmu);
+			perf_pmu_enable(&cpu_pmu->pmu);
 		}
 		break;
 	}
