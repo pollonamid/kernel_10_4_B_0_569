@@ -5,6 +5,7 @@
  *
  * Copyright (C) 2007 Google Incorporated
  * Copyright (c) 2008-2014, Code Aurora Forum. All rights reserved.
+ * Copyright (c) 2008-2014, The Linux Foundation. All rights reserved.
  * Copyright (C) 2012-2013 Sony Mobile Communications AB.
  *
  * This software is licensed under the terms of the GNU General Public
@@ -1829,24 +1830,6 @@ static int msm_fb_register(struct msm_fb_data_type *mfd)
 	return ret;
 }
 
-static void msm_fb_client_counter(struct fb_info *info, int user, bool open)
-{
-	static int cnt;
-	int idx;
-
-	if (user != 1)
-		return;
-
-	if (open)
-		cnt++;
-	else
-		cnt--;
-
-	if (!cnt)
-		for (idx = 2; idx <= 4; idx++)
-			mdp4_overlay_unset(info, idx);
-}
-
 static int msm_fb_open(struct fb_info *info, int user)
 {
 	struct msm_fb_data_type *mfd = (struct msm_fb_data_type *)info->par;
@@ -1893,7 +1876,6 @@ static int msm_fb_open(struct fb_info *info, int user)
 		}
 	}
 
-	msm_fb_client_counter(info, user, true);
 	mfd->ref_cnt++;
 	return 0;
 }
@@ -1944,7 +1926,7 @@ static int msm_fb_release_all(struct fb_info *info, boolean is_all)
 }
 static int msm_fb_release(struct fb_info *info, int user)
 {
-        return msm_fb_release_all(info, false);
+	return msm_fb_release_all(info, false);
 }
 
 void msm_fb_wait_for_fence(struct msm_fb_data_type *mfd)
