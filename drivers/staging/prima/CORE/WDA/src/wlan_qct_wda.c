@@ -3275,6 +3275,9 @@ void WDA_DelBSSReqCallback(WDI_DelBSSRspParamsType *wdiDelBssRsp,
                  "%s: Clear STA index form table Fail", __func__);
      VOS_ASSERT(0) ;
    }
+
+   WLANTL_StartForwarding(staIdx,0,0);
+
    vos_mem_free(pWdaParams->wdaWdiApiMsgParam);
    vos_mem_free(pWdaParams) ;
    /* reset the the system role*/
@@ -3380,6 +3383,7 @@ void WDA_DelSTAReqCallback(WDI_DelSTARspParamsType *wdiDelStaRsp,
          VOS_ASSERT(0) ;
       }
       delStaReqParam->staIdx = wdiDelStaRsp->ucSTAIdx ;
+      WLANTL_StartForwarding(delStaReqParam->staIdx,0,0);
    }
    vos_mem_free(pWdaParams->wdaWdiApiMsgParam);
    vos_mem_free(pWdaParams) ;
@@ -9224,6 +9228,19 @@ v_BOOL_t WDA_IsHwFrameTxTranslationCapable(v_PVOID_t pVosGCtx,
 {
    return WDI_IsHwFrameTxTranslationCapable(staIdx);
 }
+
+/*
+ * FUNCTION: WDA_IsSelfSTA
+ * Request to WDI to determine whether a given STAID is self station
+ * index.
+ */
+v_BOOL_t WDA_IsSelfSTA(v_PVOID_t pVosContext, tANI_U8 ucSTAIdx)
+{
+
+  tWDA_CbContext *pWDA = (tWDA_CbContext *)VOS_GET_WDA_CTXT(pVosContext);
+
+  return WDI_IsSelfSTA(pWDA->pWdiContext,ucSTAIdx);
+}
 /*
  * FUNCTION: WDA_NvDownloadReqCallback
  * send NV Download RSP back to PE
@@ -10500,7 +10517,7 @@ VOS_STATUS WDA_TxPacket(tWDA_CbContext *pWDA,
                                 after the packet gets completed(packet freed once)*/
 
       /* TX MGMT fail with COMP timeout, try to detect DXE stall */
-      WDA_TransportChannelDebug(pMac, 1, WPAL_DEBUG_TX_DESC_RESYNC);
+      WDA_TransportChannelDebug(pMac, 1, 0);
 
       /*Tag Frame as timed out for later deletion*/
       vos_pkt_set_user_data_ptr( (vos_pkt_t *)pFrmBuf, VOS_PKT_USER_DATA_ID_WDA, 
