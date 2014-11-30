@@ -563,3 +563,6 @@ CONFIG_DEFAULT_WESTWOOD=y
 # use optimized encryption
 CONFIG_CRYPTO_SHA1_ARM=y
 CONFIG_CRYPTO_AES_ARM=y
+
+# use noop by default
+CONFIG_DEFAULT_NOOP=y
